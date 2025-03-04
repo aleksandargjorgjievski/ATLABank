@@ -1,131 +1,143 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+    View,
+    Text,
+    TextInput,
+    Button,
+    StyleSheet,
+    ActivityIndicator
 } from 'react-native';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import Dashboard from './Dashboard.tsx'
+const App = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [balance, setBalance] = useState<number | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+    const handleLogin = async () => {
+        setLoading(true);
+        setError('');
+        try {
+            const userCredential = await auth().signInWithEmailAndPassword(email, password);
+            console.log('User logged in:', userCredential.user.uid);
+            setLoggedIn(true);
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Login failed. Please check your credentials.');
+        }
+        setLoading(false);
+    };
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = auth().currentUser?.uid;
+            if (userId) {
+                try {
+                    const docSnapshot = await firestore()
+                        .collection('Users')
+                        .doc(userId)
+                        .get();
+                    if (docSnapshot.exists) {
+                        const userData = docSnapshot.data();
+                        console.log('User Account:', userData);
+                        if (userData && userData.Balance !== undefined) {
+                            setBalance(userData.Balance);
+                        } else {
+                            setError('User data does not contain a balance.');
+                        }
+                    } else {
+                        setError('User document not found.');
+                    }
+                } catch (err) {
+                    console.error('Error fetching user data:', err);
+                    setError('Error fetching account data.');
+                }
+            }
+        };
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
+        if (loggedIn) {
+            fetchUserData();
+        }
+    }, [loggedIn]);
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+    const handleLogout = async () => {
+        await auth().signOut();
+        setLoggedIn(false);
+        setBalance(null);
+    };
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+    if (loading) {
+        return (
+            <View style={styles.container}>
+                <ActivityIndicator size="large" />
+            </View>
+        );
+    }
 
-  /*
-   * To keep the template simple and small we're adding padding to prevent view
-   * from rendering under the System UI.
-   * For bigger apps the reccomendation is to use `react-native-safe-area-context`:
-   * https://github.com/AppAndFlow/react-native-safe-area-context
-   *
-   * You can read more about it here:
-   * https://github.com/react-native-community/discussions-and-proposals/discussions/827
-   */
-  const safePadding = '5%';
+    if (!loggedIn) {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.title}>Login</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="grozdober.palevski@yahoo.com"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                    onChangeText={setEmail}
+                    value={email}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="thisismypassword123"
+                    secureTextEntry
+                    onChangeText={setPassword}
+                    value={password}
+                />
+                {error ? <Text style={styles.error}>{error}</Text> : null}
+                <Button title="Login" onPress={handleLogin} />
+            </View>
+        );
+    }
 
-  return (
-    <View style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        style={backgroundStyle}>
-        <View style={{paddingRight: safePadding}}>
-          <Header/>
+    return balance !== null ? (
+        <Dashboard balance={balance} userId={auth().currentUser?.uid as string} onLogout={handleLogout} />
+    ) : (
+        <View style={styles.container}>
+            <Text>Loading account balance...</Text>
         </View>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-            paddingHorizontal: safePadding,
-            paddingBottom: safePadding,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </View>
-  );
-}
+    );
+};
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        backgroundColor: '#ffffff'
+    },
+    title: {
+        fontSize: 24,
+        marginBottom: 20,
+        textAlign: 'center'
+    },
+    input: {
+        height: 50,
+        borderColor: '#ccc',
+        borderWidth: 1,
+        marginBottom: 15,
+        paddingHorizontal: 10,
+        borderRadius: 4,
+        color: '#000',
+    },
+    error: {
+        color: 'red',
+        marginBottom: 15,
+        textAlign: 'center'
+    }
 });
 
 export default App;
