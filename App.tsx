@@ -9,10 +9,11 @@ import {
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import Dashboard from './Dashboard.tsx'
+import Dashboard from './Dashboard.tsx';
+import LoginScreen from "./src/screens/LoginScreen.tsx";
 const App = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('grozdober.palevski@yahoo.com');
+    const [password, setPassword] = useState('thisismypassword123');
     const [loggedIn, setLoggedIn] = useState(false);
     const [balance, setBalance] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
