@@ -7,10 +7,10 @@ const OrangeFooter: React.FC = () => {
 
 const styles = StyleSheet.create({
   footer: {
-    position: 'absolute',
+    position: 'static',
     bottom: 0,
     width: '100%',
-    height: 123,
+    height: 80,
     backgroundColor: '#FE9223',
   },
 });

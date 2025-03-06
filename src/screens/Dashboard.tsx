@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, ScrollView } from 'react-native';
-import TransactionsChart from './TransactionsChart';
-import LineChartComponent from './LineChart';
-import VisualCards from './VisualCards';
+import TransactionsChart from '../components/DashboardComponents/TransactionsChart';
+import LineChartComponent from '../components/DashboardComponents/LineChart';
+import VisualCards from '../components/DashboardComponents/VisualCards';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationBar} from "../components/HomeTabComponents/NavigationBar.tsx";
+import {DashboardScreenProps} from "../../types.tsx";
 
-interface DashboardProps {
-    balance: number;
-    userId: string;
-    onLogout: () => void;
-}
+const Dashboard: React.FC<DashboardScreenProps> = ({ route, navigation }) => {
+    const { userId } = route.params || { userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'};
 
-const Dashboard: React.FC<DashboardProps> = ({ balance, userId, onLogout }) => {
     const [showCharts, setShowCharts] = useState(false);
     const [selectedChart, setSelectedChart] = useState<'pie' | 'line' | 'visual'>('pie');
     const [selectedPeriod, setSelectedPeriod] = useState<'daily' | 'weekly' | 'monthly'>('daily');
@@ -19,7 +18,6 @@ const Dashboard: React.FC<DashboardProps> = ({ balance, userId, onLogout }) => {
     return (
         <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.container}>
-                <Text style={styles.balanceText}>Balance: {balance} ден.</Text>
                 <Button
                     title={showCharts ? "Hide Charts" : "Show Charts"}
                     onPress={() => setShowCharts(!showCharts)}
@@ -60,9 +58,11 @@ const Dashboard: React.FC<DashboardProps> = ({ balance, userId, onLogout }) => {
                     </View>
                 )}
                 <View style={styles.logoutContainer}>
-                    <Button title="Logout" onPress={onLogout} />
+                    <Button title="Logout" />
                 </View>
+
             </View>
+            <NavigationBar navigation={navigation} />
         </ScrollView>
     );
 };

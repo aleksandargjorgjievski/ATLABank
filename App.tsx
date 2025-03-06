@@ -2,143 +2,58 @@ import React, { useState, useEffect } from 'react';
 import {
     View,
     Text,
-    TextInput,
-    Button,
     StyleSheet,
-    ActivityIndicator
+    ActivityIndicator, ScrollView, SafeAreaView, TextInput
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import Dashboard from './Dashboard.tsx';
-import LoginScreen from "./src/screens/LoginScreen.tsx";
+
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeTab from "./src/screens/HomeTab.tsx";
+import LoginScreen from './src/screens/LoginScreen.tsx';
+import Dashboard from './src/screens/Dashboard.tsx';
+import { enableScreens } from 'react-native-screens';
+import {NavigationBar} from './src/components/HomeTabComponents/NavigationBar.tsx';
+import { RootStackParamList } from "./types.tsx";
+import ChallengeReward from "./src/screens/ChallengeReward.tsx";
+
+
+enableScreens();
+
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
+
 const App = () => {
-    const [email, setEmail] = useState('grozdober.palevski@yahoo.com');
-    const [password, setPassword] = useState('thisismypassword123');
-    const [loggedIn, setLoggedIn] = useState(false);
-    const [balance, setBalance] = useState<number | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-
-    const handleLogin = async () => {
-        setLoading(true);
-        setError('');
-        try {
-            const userCredential = await auth().signInWithEmailAndPassword(email, password);
-            console.log('User logged in:', userCredential.user.uid);
-            setLoggedIn(true);
-        } catch (err) {
-            console.error('Login error:', err);
-            setError('Login failed. Please check your credentials.');
-        }
-        setLoading(false);
-    };
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const userId = auth().currentUser?.uid;
-            if (userId) {
-                try {
-                    const docSnapshot = await firestore()
-                        .collection('Users')
-                        .doc(userId)
-                        .get();
-                    if (docSnapshot.exists) {
-                        const userData = docSnapshot.data();
-                        console.log('User Account:', userData);
-                        if (userData && userData.Balance !== undefined) {
-                            setBalance(userData.Balance);
-                        } else {
-                            setError('User data does not contain a balance.');
-                        }
-                    } else {
-                        setError('User document not found.');
-                    }
-                } catch (err) {
-                    console.error('Error fetching user data:', err);
-                    setError('Error fetching account data.');
-                }
-            }
-        };
-
-        if (loggedIn) {
-            fetchUserData();
-        }
-    }, [loggedIn]);
-
-    const handleLogout = async () => {
-        await auth().signOut();
-        setLoggedIn(false);
-        setBalance(null);
-    };
-
-    if (loading) {
-        return (
-            <View style={styles.container}>
-                <ActivityIndicator size="large" />
-            </View>
-        );
-    }
-
-    if (!loggedIn) {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="grozdober.palevski@yahoo.com"
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                    onChangeText={setEmail}
-                    value={email}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="thisismypassword123"
-                    secureTextEntry
-                    onChangeText={setPassword}
-                    value={password}
-                />
-                {error ? <Text style={styles.error}>{error}</Text> : null}
-                <Button title="Login" onPress={handleLogin} />
-            </View>
-        );
-    }
-
-    return balance !== null ? (
-        <Dashboard balance={balance} userId={auth().currentUser?.uid as string} onLogout={handleLogout} />
-    ) : (
-        <View style={styles.container}>
-            <Text>Loading account balance...</Text>
-        </View>
+    return (
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Login">
+                    <Stack.Screen
+                        name="Login"
+                        component={LoginScreen}
+                        options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="Home"
+                        component={HomeTab}
+                        options={{ headerShown: false }}
+                        initialParams={{ userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'}}
+                    />
+                    <Stack.Screen
+                        name="Dashboard"
+                        component={Dashboard}
+                        options={{ headerShown: false }}
+                        initialParams={{ userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'}}
+                    />
+                    <Stack.Screen
+                        name="Challenges"
+                        component={ChallengeReward}
+                        options={{ headerShown: false }}
+                        initialParams={{ userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'}}
+                    />
+                </Stack.Navigator>
+            </NavigationContainer>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-        backgroundColor: '#ffffff'
-    },
-    title: {
-        fontSize: 24,
-        marginBottom: 20,
-        textAlign: 'center'
-    },
-    input: {
-        height: 50,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        marginBottom: 15,
-        paddingHorizontal: 10,
-        borderRadius: 4,
-        color: '#000',
-    },
-    error: {
-        color: 'red',
-        marginBottom: 15,
-        textAlign: 'center'
-    }
-});
 
 export default App;
