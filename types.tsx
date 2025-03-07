@@ -10,8 +10,20 @@ export type RootStackParamList = {
       userId: string,
       balance: number
   };
+    Challenges: {
+        userId: string,
+        balance: number
+    };
+    Payments: {
+        userId: string,
+        balance: number
+    };
 };
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, "Home">;
 
 export type DashboardScreenProps = NativeStackScreenProps<RootStackParamList, "Dashboard">;
+
+export type ChallengesScreenProps = NativeStackScreenProps<RootStackParamList, "Challenges">;
+
+export type PaymentsScreenProps = NativeStackScreenProps<RootStackParamList, "Payments">;

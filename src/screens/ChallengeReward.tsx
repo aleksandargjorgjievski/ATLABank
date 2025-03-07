@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {NavigationBar} from "../components/HomeTabComponents/NavigationBar.tsx";
 
 /** Ovdeka se definirav parametri odnosno podatoci za ChallengeReward */
 interface ChallengeReward {
@@ -154,6 +155,7 @@ const ChallengeReward: React.FC = () => {
                     )}
                 </View>
             ))}
+            <NavigationBar />
         </View>
     );
 };

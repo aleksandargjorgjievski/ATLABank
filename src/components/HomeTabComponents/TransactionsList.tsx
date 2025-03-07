@@ -81,12 +81,18 @@ export const TransactionList: React.FC<{ userId: string }> = ({userId}) => {
             <Text style={styles.header}>Последни трансакции</Text>
             {filteredTransactions.map(transaction => (
                 <View key={transaction.transactionId} style={styles.transactionRow}>
+                    <View style={styles.leftColumn}>
                     <Text style={styles.transactionText}>{transaction.category}</Text>
+                    </View>
+                    <View style={styles.centerColumn}>
                     <Text style={styles.transactionDate}>
                         {transaction.date &&
                             new Date(transaction.date.seconds * 1000).toLocaleDateString()}
                     </Text>
+                    </View>
+                    <View style={styles.rightColumn}>
                     <Text style={styles.transactionAmount}> - MKD {transaction.amount}.00</Text>
+                    </View>
                 </View>
             ))}
         </View>
@@ -94,39 +100,15 @@ export const TransactionList: React.FC<{ userId: string }> = ({userId}) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: -10,
-    width: '100%',
-    paddingHorizontal: 11,
-      backgroundColor: '#FFF',
-    fontFamily: 'Poppins',
-      alignItems: 'flex-start',
-      flexDirection: 'column',
-      justifyContent: "space-evenly",
-  },
-  image: {
-    aspectRatio: 1.18,
-    width: '100%',
-      paddingTop: 0,
-      marginBottom: 0,
-  },
-  title: {
-    marginTop: 45,
-    fontSize: 20,
-    color: 'rgba(0, 0, 0, 1)',
-    fontWeight: '500',
-    lineHeight: 24,
-      paddingLeft: 10,
-  },
-  transactionPlaceholder: {
-    minHeight: 29,
-    marginTop: 11,
-    width: '100%',
-  },
-    loaderContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+    container: {
+        marginTop: -10,
+        width: '100%',
+        paddingHorizontal: 11,
+        backgroundColor: '#FFF',
+        fontFamily: 'Poppins',
+        alignItems: 'flex-start',
+        flexDirection: 'column',
+        justifyContent: "space-evenly",
     },
     header: {
         fontSize: 20,
@@ -135,13 +117,30 @@ const styles = StyleSheet.create({
         lineHeight: 24,
         marginBottom: 10,
     },
+    image: {
+    aspectRatio: 1.18,
+    width: '100%',
+      paddingTop: 0,
+      marginBottom: 0,
+  },
     transactionRow: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         paddingVertical: 5,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         width: '100%',
+    },
+    leftColumn: {
+        flex: 1,
+        alignItems: 'flex-start',
+    },
+    centerColumn: {
+        flex: 1,
+        alignItems: 'center',
+    },
+    rightColumn: {
+        flex: 1,
+        alignItems: 'flex-end',
     },
     transactionText: {
         fontSize: 13,
@@ -150,19 +149,14 @@ const styles = StyleSheet.create({
     transactionDate: {
         fontSize: 13,
         color: '#000',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft:100,
-        marginRight:100,
-    },
-    transactionCategory: {
-        fontSize: 13,
-        color: '#000',
     },
     transactionAmount: {
-      fontSize: 13,
+        fontSize: 13,
         color: '#F00',
     },
-
-
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });

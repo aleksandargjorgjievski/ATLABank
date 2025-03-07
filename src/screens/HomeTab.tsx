@@ -18,7 +18,7 @@ const HomeTab: React.FC<HomeScreenProps> = ({route, navigation}) => {
         <Card  balance={balance}/>
       <TransactionsList />
         <TransactionList userId={userId}/>
-      <NavigationBar userId={userId}/>
+      <NavigationBar  />
     </View>
   );
 };

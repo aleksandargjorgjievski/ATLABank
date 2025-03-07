@@ -17,6 +17,7 @@ import { enableScreens } from 'react-native-screens';
 import {NavigationBar} from './src/components/HomeTabComponents/NavigationBar.tsx';
 import { RootStackParamList } from "./types.tsx";
 import ChallengeReward from "./src/screens/ChallengeReward.tsx";
+import PaymentsScreen from "./src/screens/PaymentsScreen.tsx";
 
 
 enableScreens();
@@ -48,6 +49,12 @@ const App = () => {
                     <Stack.Screen
                         name="Challenges"
                         component={ChallengeReward}
+                        options={{ headerShown: false }}
+                        initialParams={{ userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'}}
+                    />
+                    <Stack.Screen
+                        name="Payments"
+                        component={PaymentsScreen}
                         options={{ headerShown: false }}
                         initialParams={{ userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1'}}
                     />

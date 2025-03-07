@@ -59,7 +59,9 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
         </TouchableOpacity>
 
         {/* Profile */}
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}
+        onPress={() => navigation.navigate("Payments")}
+        >
           <Image
               source={require('../../assets/plus.png')}
               style={styles.icon}
