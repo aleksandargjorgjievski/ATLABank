@@ -14,7 +14,7 @@ const Card: React.FC<CardProps> = ({balance}) => {
             </View>
             <View style={styles.cardContent}>
                 <Text style={styles.balanceLabel}>Тековна состојба</Text>
-                <Text style={styles.balanceAmount}>MKD {balance}</Text>
+                <Text style={styles.balanceAmount}>MKD {balance/1000},00</Text>
             </View>
         </View>
     );

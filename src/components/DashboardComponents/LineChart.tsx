@@ -10,44 +10,43 @@ interface Transaction {
     date: Date;
 }
 
-interface LineChartComponentProps {
-    userId: string;
-    period: 'daily' | 'weekly' | 'monthly';
-}
+    interface LineChartComponentProps {
+        userId: string;
+        period: 'daily' | 'weekly' | 'monthly';
+    }
 
-// Helper function to generate a group key based on the period.
+// Генерирање на кључ за да може полсно да се одредуе кој период на време ни треба
 function getGroupKey(date: Date, period: 'daily' | 'weekly' | 'monthly'): string {
 
     const today = new Date();
     const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay()); // Get the start of the current week (Sunday)
-    startOfWeek.setHours(0, 0, 0, 0); // Set to midnight for consistency
+    startOfWeek.setDate(today.getDate() - today.getDay()); // Овдека га добивамо почетак на недељу
+    startOfWeek.setHours(0, 0, 0, 0); // Местење на полноќ туја
 
-    // Get the end of the current week (Saturday, 11:59:59)
+    // Наваѓање на полетак и крај на недељу
     const endOfWeek = new Date(startOfWeek);
     endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999); // End of day
+    endOfWeek.setHours(23, 59, 59, 999); // Мести се крај на дн
 
     if (period === 'daily') {
-        // If the date is not within this week, return an empty string or skip the data
+        // Проверување за "daily"
         if (date < startOfWeek || date > endOfWeek) {
-            return ''; // Return empty string to exclude the date
+            return '';
         }
-        // Format: M-D
+        // Остављамо формат M-D да биде
         return `${date.getMonth() + 1}-${date.getDate()}`;
     } else if (period === 'weekly') {
-        // Simple week-of-month grouping.
         const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
         const weekNumber = Math.ceil((date.getDate() + firstDay.getDay()) / 7);
         return `${date.getMonth() + 1}-W${weekNumber}`;
     } else if (period === 'monthly') {
-        // Format: YYYY-M
+        // Туја мењамо формат на YYYY-M
         return `${date.getFullYear()}-${date.getMonth() + 1}`;
     }
     return '';
 }
 
-// Function to aggregate transactions by period.
+// Туја ги правимо транзакцие
 function aggregateTransactionsByPeriod(transactions: Transaction[], period: 'daily' | 'weekly' | 'monthly') {
     const groups: { [key: string]: number } = {};
 
@@ -56,29 +55,20 @@ function aggregateTransactionsByPeriod(transactions: Transaction[], period: 'dai
         groups[key] = (groups[key] || 0) + tx.amount;
     });
 
-    // Sort the keys chronologically.
+    // Сортирање
     const sortedKeys = Object.keys(groups).sort((a, b) => {
         let dateA: Date, dateB: Date;
 
         try {
             if (period === 'daily') {
-                // Ensure YYYY-MM-DD format
+                // Проверување на формат
                 const partsA = a.split('-').map(Number);
                 const partsB = b.split('-').map(Number);
-                console.log("PartsA: " + partsA + " PartsB: " + partsB + " PartsALength: " + partsA.length + " PartsBLength: " + partsB.length);
-                // Validate input forma2
-                if (partsA.length !== 2 || partsB.length !== 2) {
-                    throw new Error('Invalid date format for daily period');
-                }
-
                 dateA = new Date(partsA[0], partsA[1] - 1, partsA[1]);
                 dateB = new Date(partsB[0], partsB[1] - 1, partsB[1]);
             } else if (period === 'monthly') {
-                // Ensure YYYY-MM format
                 const partsA = a.split('-').map(Number);
                 const partsB = b.split('-').map(Number);
-
-                // Validate input format
                 if (partsA.length !== 2 || partsB.length !== 2) {
                     throw new Error('Invalid date format for monthly period');
                 }
@@ -86,7 +76,7 @@ function aggregateTransactionsByPeriod(transactions: Transaction[], period: 'dai
                 dateA = new Date(partsA[0], partsA[1] - 1, 1);
                 dateB = new Date(partsB[0], partsB[1] - 1, 1);
             } else if (period === 'weekly') {
-                // Handle week format like YYYY-Www
+                // Недењан формат туја YYYY-Www
                 const matchA = a.match(/^(\d{1})-W(\d{1})$/);
                 const matchB = b.match(/^(\d{1})-W(\d{1})$/);
 
@@ -99,7 +89,7 @@ function aggregateTransactionsByPeriod(transactions: Transaction[], period: 'dai
                 const yearB = parseInt(matchB[1]);
                 const weekB = parseInt(matchB[2]);
 
-                // Create date for the first day of the specified week
+                // Дата на прв дн од недељу туја
                 dateA = new Date(yearA, 0, 1 + (weekA - 1) * 7);
                 dateB = new Date(yearB, 0, 1 + (weekB - 1) * 7);
             } else {
@@ -109,7 +99,7 @@ function aggregateTransactionsByPeriod(transactions: Transaction[], period: 'dai
             return dateA.getTime() - dateB.getTime();
         } catch (error) {
             console.error('Sorting error:', error);
-            // Fallback to string comparison if date parsing fails
+            // Бекап плен ако ништо не пројде
             return a.localeCompare(b);
         }
     });

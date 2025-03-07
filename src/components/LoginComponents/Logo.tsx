@@ -4,9 +4,9 @@ import {Image, StyleSheet} from 'react-native';
 const Logo: React.FC = () => {
   return (
     <Image
-      source={{
-        uri: 'https://cdn.builder.io/api/v1/image/assets/TEMP/3f9e40a7b706c219b01a1341504e79303d9ace9f',
-      }}
+      source={
+        require('../../assets/halkbank.png')
+      }
       style={styles.logo}
       resizeMode="contain"
     />

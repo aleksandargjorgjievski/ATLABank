@@ -111,26 +111,6 @@
                     </ScrollView>
                     <OrangeFooter />
                 </SafeAreaView>
-                // <View style={styles.container}>
-                //     <Text style={styles.title}>Login</Text>
-                //     <TextInput
-                //         style={styles.input}
-                //         placeholder="grozdober.palevski@yahoo.com"
-                //         autoCapitalize="none"
-                //         keyboardType="email-address"
-                //         onChangeText={setEmail}
-                //         value={email}
-                //     />
-                //     <TextInput
-                //         style={styles.input}
-                //         placeholder="thisismypassword123"
-                //         secureTextEntry
-                //         onChangeText={setPassword}
-                //         value={password}
-                //     />
-                //     {error ? <Text style={styles.error}>{error}</Text> : null}
-                //     <Button title="Login" onPress={handleLogin} />
-                // </View>
             );
         }
 
@@ -179,7 +159,7 @@
             alignItems: "center",
             width: "100%",
             maxWidth: 412,
-            paddingBottom: 123, // Space for footer
+            paddingBottom: 123,
         },
         inputContainer: {
             width: "100%",

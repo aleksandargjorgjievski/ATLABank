@@ -2,24 +2,12 @@ import * as React from 'react';
 import {View, Image, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {HomeScreenProps, RootStackParamList} from "../../../types.tsx";
-// export const NavigationBar: React.FC = () => {
-//   return (
-//     <View style={styles.container}>
-//       <Image
-//         source={
-//           require('./src/assets/home.png')
-//         }
-//         style={styles.image}
-//       />
-//     </View>
-//   );
-// };
+
 
 export const NavigationBar: React.FC<HomeScreenProps>  = () => {
     const navigation = useNavigation<HomeScreenProps>();
     return (
       <View style={styles.container}>
-        {/* Home */}
         <TouchableOpacity style={styles.button}
                           onPress={() => {navigation.navigate('Home', {
                                 userId: 'F2xkoquV0RO1FFFj3kb3LiOP1Yh1',
@@ -32,8 +20,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
           />
           <Text style={styles.label}>Home</Text>
         </TouchableOpacity>
-
-        {/* Categorization */}
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.navigate('Dashboard',
                               {
@@ -46,8 +32,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
           />
           <Text style={styles.label}>Categorization</Text>
         </TouchableOpacity>
-
-        {/* Challenges */}
         <TouchableOpacity style={styles.button}
         onPress={() => navigation.navigate('Challenges')}
         >
@@ -57,8 +41,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
           />
           <Text style={styles.label}>Challenges</Text>
         </TouchableOpacity>
-
-        {/* Profile */}
         <TouchableOpacity style={styles.button}
         onPress={() => navigation.navigate("Payments")}
         >
@@ -72,38 +54,18 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
   );
 };
 
-
-// const styles = StyleSheet.create({
-//   container: {
-//     position: 'absolute',
-//     bottom: 0,
-//     left: 0,
-//     right: 0,
-//     paddingHorizontal: 20,
-//     paddingVertical: 19,
-//     alignItems: 'flex-start',
-//     justifyContent: 'center',
-//     backgroundColor: '#DAEBFF',
-//   },
-//   image: {
-//     aspectRatio: 1,
-//     width: 52,
-//   },
-// });
-
-
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
 
-    backgroundColor: '#FFF',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
+      backgroundColor: '#FFF',
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingVertical: 10,
   },
   button: {
     alignItems: 'center',

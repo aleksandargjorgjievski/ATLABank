@@ -10,7 +10,6 @@ export const AccountHeader: React.FC<AccountHeaderProps> = ({
                                                             }) => {
   return (
       <View style={styles.container}>
-        {/* Wrap the image and text in a row container */}
         <View style={styles.profileContainer}>
           <Image
               source={require('../../assets/profile.png')}
@@ -18,7 +17,6 @@ export const AccountHeader: React.FC<AccountHeaderProps> = ({
           />
           <Text style={styles.input}>Гроздобер Павлевски</Text>
         </View>
-
         <View style={styles.accountInfo}>
           <View style={styles.accountDetails}>
             <View style={styles.accountRow}>

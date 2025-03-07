@@ -5,7 +5,7 @@ import firestore from '@react-native-firebase/firestore';
 interface Transaction {
     transactionId: string;
     amount: number;
-    category: string;
+    location: string;
     date: any;
 }
 
@@ -35,7 +35,7 @@ export const TransactionList: React.FC<{ userId: string }> = ({userId}) => {
                     .collection('Users')
                     .doc(userId)
                     .collection('Transactions')
-                    .orderBy('date')
+                    .orderBy('date', 'desc')
                     .limit(10)
                     .get();
 
@@ -46,12 +46,10 @@ export const TransactionList: React.FC<{ userId: string }> = ({userId}) => {
                     transactions.push({
                         transactionId: doc.id,
                         amount: parseFloat(data.amount),
-                        category: data.category || 'Other',
+                        location: data.location ,
                         date: data.date,
                     });
                 });
-
-                // If no transactions are found, throw a proper Error object
                 if (transactions.length === 0) {
                     throw new Error('No transactions found');
                 }
@@ -82,7 +80,7 @@ export const TransactionList: React.FC<{ userId: string }> = ({userId}) => {
             {filteredTransactions.map(transaction => (
                 <View key={transaction.transactionId} style={styles.transactionRow}>
                     <View style={styles.leftColumn}>
-                    <Text style={styles.transactionText}>{transaction.category}</Text>
+                    <Text style={styles.transactionText}>{transaction.location}</Text>
                     </View>
                     <View style={styles.centerColumn}>
                     <Text style={styles.transactionDate}>
