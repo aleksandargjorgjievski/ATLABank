@@ -18,7 +18,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
               source={require('../../assets/home.png')}
               style={styles.icon}
           />
-          <Text style={styles.label}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
                           onPress={() => navigation.navigate('Dashboard',
@@ -30,7 +29,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
               source={require('../../assets/categorization.png')}
               style={styles.icon}
           />
-          <Text style={styles.label}>Categorization</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
         onPress={() => navigation.navigate('Challenges')}
@@ -39,7 +37,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
               source={require('../../assets/challenges.png')}
               style={styles.icon}
           />
-          <Text style={styles.label}>Challenges</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
         onPress={() => navigation.navigate("Payments")}
@@ -48,7 +45,6 @@ export const NavigationBar: React.FC<HomeScreenProps>  = () => {
               source={require('../../assets/plus.png')}
               style={styles.icon}
           />
-          <Text style={styles.label}>Profile</Text>
         </TouchableOpacity>
       </View>
   );

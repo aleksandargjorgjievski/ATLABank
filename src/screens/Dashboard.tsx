@@ -32,10 +32,12 @@ const Dashboard: React.FC<DashboardScreenProps> = ({route}) => {
                 <View style={styles.content}>
                     <AccountSelector />
                     <View style={styles.chartsContainer}>
+                        <View style={{paddingLeft: 14}}>
                         <PeriodSelector
                             selectedPeriod={selectedPeriod}
                             onChange={setSelectedPeriod}
                         />
+                    </View>
                         <TransactionsChart userId={userId} period={selectedPeriod}/>
                         <LineChart userId={userId} period={selectedPeriod}/>
                         <VisualCards userId={userId} period={selectedPeriod} balance={balance}/>
@@ -63,13 +65,12 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         paddingBottom: 2,
         zIndex: 10,
+        alignItems: "center",
     },
     selector: {
         borderRadius: 15,
         borderWidth: 1,
         borderColor: "#CBCBCB",
-        borderTopLeftRadius: 50,
-        borderTopRightRadius: 50,
         width: 295,
         maxWidth: "100%",
         padding: 12,
@@ -82,7 +83,8 @@ const styles = StyleSheet.create({
     },
     chartsContainer: {
         marginTop: 20,
-        paddingHorizontal: 32,
+        paddingHorizontal: 20,
+
     },
     spacer: {
         height: 8,

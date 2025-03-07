@@ -130,8 +130,7 @@
         container: {
             flex: 1,
             justifyContent: 'center',
-            paddingHorizontal: 20,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
         },
         title: {
             fontSize: 24,

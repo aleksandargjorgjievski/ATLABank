@@ -31,9 +31,10 @@ interface PaymentCardProps {
 }
 
 const data = [
-    { label: 'Економски факлутет', value: 'ekonomski' },
-    { label: 'ФИНКИ', value: 'finki' },
-    { label: 'ФЕИТ', value: 'feit' },
+    { label: 'УГД', value: 'ugd' },
+    { label: 'УКИМ', value: 'ukim' },
+    { label: 'УКЛО', value: 'uko' },
+    { label: 'American College', value: 'american' },
 ];
 
 const PaymentCard: React.FC<PaymentCardProps> = ({ icon, text, active, onPress }) => (
