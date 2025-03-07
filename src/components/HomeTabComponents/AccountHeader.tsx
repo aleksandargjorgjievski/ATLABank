@@ -15,7 +15,7 @@ export const AccountHeader: React.FC<AccountHeaderProps> = ({
               source={require('../../assets/profile.png')}
               style={styles.logo}
           />
-          <Text style={styles.input}>Гроздобер Павлевски</Text>
+          <Text style={styles.input}>Гроздобер Палевски</Text>
         </View>
         <View style={styles.accountInfo}>
           <View style={styles.accountDetails}>
